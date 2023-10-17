@@ -1,6 +1,6 @@
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
-# To-DO-APP <br/>
+# To-DO-APP 
 >**The React Native To-Do App is a versatile task management tool that empowers users to create, edit, and remove tasks with ease. Its sleek, user-friendly interface is accented by a calming sky blue theme. The app allows quick task input in a central input field. Users can add new tasks and update existing ones seamlessly. With the touch of a button, tasks are added or modified.
 The app's interface features a list of tasks with dynamic elements, which users can click to make changes or delete tasks. It boasts a responsive design, where the app's layout adjusts to various screen sizes, making it compatible with different devices.
 Whether it's organizing daily chores, managing projects, or simply jotting down notes, the React Native To-Do App is a functional and aesthetic tool to help users stay organized and on top of their tasks while enjoying an elegant and intuitive design.**
