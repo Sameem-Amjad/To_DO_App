@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import
-  {
-    StatusBar,
-    Text,
-    View,
-    StyleSheet,
-    TextInput,
-    TouchableOpacity,
-    ScrollView,Keyboard
-  } from 'react-native';
+import {
+  StatusBar,
+  Text,
+  View,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  Keyboard,
+  ToastAndroid,
+  TouchableHighlight,
+  Pressable,
+} from 'react-native';
 function App() {
   const [item, setItem] = useState('');
 
@@ -16,27 +19,41 @@ function App() {
   const [edit, setEdit] = useState(-1);
   const addItem = () => {
     if (item !== '') {
-      setList([...list, item]);
+      setList([...list, {data: item, id: Math.random()}]);
     }
     setItem('');
     Keyboard.dismiss(true);
+    ToastAndroid.showWithGravityAndOffset(
+      'Touch the Text item for Update',
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER,
+      40,
+      10,
+    );
   };
   const deleteItem = itemList => {
-    setList(list.filter(item => item !== itemList));
+    setList(
+      list.filter(item => {
+        return item !== itemList;
+      }),
+    );
     setEdit(-1);
     setItem('');
   };
-  const updateItem = (index, itemList) => {
-    setEdit(index);
-    setItem(itemList);
-    console.log(edit);
+  const updateItem = itemList => {
+    setEdit(itemList.id);
+    setItem(itemList.data);
   };
   const updateList = () => {
-    setList(list.map((element, i) => (i === edit ? item : element)));
-    console.log(list);
+    setList(
+      list.map(element =>
+        element.id === edit ? (element = {data: item, id: edit}) : element,
+      ),
+    );
     setEdit(-1);
     setItem('');
   };
+
   return (
     <View>
       <StatusBar backgroundColor="skyblue" barStyle="dark-content" />
@@ -50,23 +67,26 @@ function App() {
             placeholder="Enter an Item"
             value={item}
             style={style.textInput}></TextInput>
-          <TouchableOpacity
+          <TouchableHighlight
+            activeOpacity={0.6}
+            underlayColor="grey"
             style={style.button}
-            onPress={edit == -1 ? addItem : updateList}>
+            onPress={edit === -1 ? addItem : updateList}>
             <Text
               style={{textAlign: 'center', color: 'white', fontWeight: 'bold'}}>
-              {edit == -1 ? `Submit` : `Update`}
+              {edit === -1 ? `Submit` : `Update`}
             </Text>
-          </TouchableOpacity>
+          </TouchableHighlight>
         </View>
       </View>
-      <ScrollView>
-        <View style={{alignItems: 'center'}}>
-          {list.map((itemList, index) => (
+      <View style={{alignItems: 'center'}}>
+        <FlatList
+          data={list}
+          renderItem={itemList => (
             <TouchableOpacity
               style={style.listView}
-              onPress={() => updateItem(index, itemList)}
-              key={index}>
+              onPress={() => updateItem(itemList)}
+              key={itemList.id}>
               <Text
                 style={{
                   textAlign: 'center',
@@ -75,10 +95,10 @@ function App() {
                   color: 'white',
                   width: '60%',
                 }}>
-                {itemList}
+                {itemList.data}
               </Text>
               <View style>
-                <TouchableOpacity
+                <Pressable
                   style={{
                     padding: '8%',
                   }}>
@@ -91,12 +111,13 @@ function App() {
                     onPress={() => deleteItem(itemList)}>
                     🗑
                   </Text>
-                </TouchableOpacity>
+                </Pressable>
               </View>
             </TouchableOpacity>
-          ))}
-        </View>
-      </ScrollView>
+          )}
+          keyExtractor={itemList => itemList.id}
+        />
+      </View>
     </View>
   );
 }
